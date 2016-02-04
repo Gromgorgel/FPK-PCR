@@ -71,11 +71,10 @@ Disclaimer
 	This function has only been tested on a limited amount of data, there may be a few bugs left. 
 	Please contact the author with any remarks and/or suggestions.
 
-	email: antoon.lievens@wiv-isp.be
+	email: antoon.lievens@ec.europa.eu
 
 	Most problems are caused by a lack of data resulting in a suboptimal fit try running more cycles first! 
 	60 cycles will do in most cases. Increasing primer concentration may help to increase the length of 
 	the firs phase of efficiency decline resulting in a better fit. 
 
 	If problems perist, feel free to contact me.
-##############################################################################################################	
