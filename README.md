@@ -1,5 +1,4 @@
-# FPK-PCR
-Full Process PCR 
+
 #########################
 ##  How to use         ##
 ## Full Process PCR    ##
