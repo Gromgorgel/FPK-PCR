@@ -37,31 +37,33 @@ Standard output returns three values:
 * `a*i0`: initial reaction fluorescence (number of initial target copies times the fluorescence of a single amplicon), expressed in Fluorescence Units (FU)
 
 parameter output (`param = TRUE`) returns three sets of parameters:
-- `Baseline`: parameters of the baseline (linear model)
+1 `Baseline`: parameters of the baseline (linear model)
   * `intercept` = y-intercept of the linear model
-  * `slope` = slope of the linear model 
-- `5PLM`: parameters of the five paramter logistic model (with sloped baseline):
+  * `slope` = slope of the linear model
+
+2 `5PLM`: parameters of the five paramter logistic model (with sloped baseline):
+ * `y0` = a numeric parameter representing the intercept of the baseline
+ * `s` = a numeric parameter representing the slope of the baseline
+ * `fmax` = a numeric parameter representing the horizontal asymptote on the right side (plateau)
+ * `xmid` = a numeric parameter representing the input value at the center of the curve
+ * `b` = a numeric scale parameter on the input axis, the 'growth rate'
+ * `g` = the reciprocal of the shape parameter: affects near which asymptote maximum 'growth' occurs
 ```
+5PLM model
 Fn = fmax + s*x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b*(x-xmid)))^g
 ```
-  * `y0` = a numeric parameter representing the intercept of the baseline
-  * `s` = a numeric parameter representing the slope of the baseline
-  * `fmax` = a numeric parameter representing the horizontal asymptote on the right side (plateau)
-  * `xmid` = a numeric parameter representing the input value at the center of the curve
-  * `b` = a numeric scale parameter on the input axis, the 'growth rate'
-  * `g` = the reciprocal of the shape parameter: affects near which asymptote maximum 'growth' occurs
 
-- `Bilinear`: parameters of the bilinear model:
+3 `Bilinear`: parameters of the bilinear model:
+ * `a1a` = "slope" describes together with a1b the curve of the first phase of efficiency decline
+ * `a1b` = "slope" describes together with a1a the curve of the first phase of efficiency decline
+ * `a2` = "slope" represents the steepness of the second phase of efficiency decline
+ * `ipt` = corresponds to the horizontal position of the phase change
+ * `eta` = affects the abruptness of transition between the two phases
+ * `chi` = affects the y-intercept of the curve
 ```
+Bilinear model:
 Ln²(En) = chi + eta *log(exp(( a1a * (input-ipt)^2+ a1b *(input-ipt))/eta) + exp( a2 *(n-ipt)/eta))
-```
-  * `a1a` = "slope" describes together with a1b the curve of the first phase of efficiency decline
-  * `a1b` = "slope" describes together with a1a the curve of the first phase of efficiency decline
-  * `a2` = "slope" represents the steepness of the second phase of efficiency decline
-  * `ipt` = corresponds to the horizontal position of the phase change
-  * `eta` = affects the abruptness of transition between the two phases
-  * `chi` = affects the y-intercept of the curve
-   
+```  
   
 #### Version FPK-V13-13
 
@@ -86,37 +88,44 @@ Arguments:
 - `p` is a numerical of length 1, the p-value of the confidence bounds calculated.
 
 Output
-	Standard output returns three values:
-		Cq: quantification cycle, calculated at the first positive second derivative maximum of a five parameter logistic model.
-		Emax: initial (maximal) efficiency of the reaction
-		a*i0: initial reaction fluorescence (number of initial target copies times the fluorescence of a single amplicon), expressed in Fluorescence Units (FU)
+`ouptut = "estimates"` returns three values:
+* `Cq`: quantification cycle, calculated at the first positive second derivative maximum of a five parameter logistic model.
+* `Emax`: initial (maximal) efficiency of the reaction
+* `a*i0`: initial reaction fluorescence (number of initial target copies times the fluorescence of a single amplicon), expressed in Fluorescence Units (FU)
 
-	parameter output returns three sets of parameters:
+`ouptut = "parameters"` returns four sets of parameters:
+1 `Baseline`: parameters of the baseline (linear model)
+  * `intercept` = y-intercept of the linear model
+  * `slope` = slope of the linear model
 
-		Baseline: parameters of the baseline (linear model)
-			intercept = y-intercept of the linear model
-			slope	  = slope of the linear model 
+2 `5PLM`: parameters of the five paramter logistic model (with sloped baseline):
+ * `y0` = a numeric parameter representing the intercept of the baseline
+ * `s` = a numeric parameter representing the slope of the baseline
+ * `fmax` = a numeric parameter representing the horizontal asymptote on the right side (plateau)
+ * `xmid` = a numeric parameter representing the input value at the center of the curve
+ * `b` = a numeric scale parameter on the input axis, the 'growth rate'
+ * `g` = the reciprocal of the shape parameter: affects near which asymptote maximum 'growth' occurs
+```
+5PLM model
+Fn = fmax + s*x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b*(x-xmid)))^g
+```
 
-		5PLM: parameters of the five paramter logistic model (with sloped baseline)
-			fmax + s*x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b*(x-xmid)))^g
-			
-			y0	= a numeric parameter representing the intercept of the baseline
-			s 	= a numeric parameter representing the slope of the baseline
-			fmax	= a numeric parameter representing the horizontal asymptote on the right side (plateau)
-			xmid	= a numeric parameter representing the input value at the center of the curve
-			b	= a numeric scale parameter on the input axis, the ’growth rate’
-			g	= the reciprocal of the shape parameter: affects near which asymptote maximum ’growth’ occurs
+3 `Quadratic`: parameters of ...
+ * test
 
-		Bilinear: parameters of the bilinear model
-			 chi + eta *log(exp(( a1a * (input-ipt)^2+ a1b *(input-ipt))/eta) + exp( a2 *(n-ipt)/eta))
+4 `Bilinear`: parameters of the bilinear model:
+ * `a1a` = "slope" describes together with a1b the curve of the first phase of efficiency decline
+ * `a1b` = "slope" describes together with a1a the curve of the first phase of efficiency decline
+ * `a2` = "slope" represents the steepness of the second phase of efficiency decline
+ * `ipt` = corresponds to the horizontal position of the phase change
+ * `eta` = affects the abruptness of transition between the two phases
+ * `chi` = affects the y-intercept of the curve
+```
+Bilinear model:
+Ln²(En) = chi + eta *log(exp(( a1a * (input-ipt)^2+ a1b *(input-ipt))/eta) + exp( a2 *(n-ipt)/eta))
+```  
 
-			 a1a	= "slope" describes together with a1b the curve of the first phase of efficiency decline
-		         a1b	= "slope" describes together with a1a the curve of the first phase of efficiency decline
-		          a2	= "slope" represents the steepness of the second phase of efficiency decline
-		         ipt	= corresponds to the horizontal position of the phase change
-		         eta	= affects the abruptness of transition between the two phases
-		         chi	= affects the y-intercept of the curve
-				
+`ouptut = "all"` returns all of the above parameters in a single vector (length = 20)
 
 ### Example
 ```
