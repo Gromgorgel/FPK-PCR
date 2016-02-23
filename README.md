@@ -37,6 +37,7 @@ Standard output returns three values:
 * `a*i0`: initial reaction fluorescence (number of initial target copies times the fluorescence of a single amplicon), expressed in Fluorescence Units (FU)
 
 parameter output (`param = TRUE`) returns three sets of parameters:
+
 1 `Baseline`: parameters of the baseline (linear model)
   * `intercept` = y-intercept of the linear model
   * `slope` = slope of the linear model
@@ -94,6 +95,7 @@ Output
 * `a*i0`: initial reaction fluorescence (number of initial target copies times the fluorescence of a single amplicon), expressed in Fluorescence Units (FU)
 
 `ouptut = "parameters"` returns four sets of parameters:
+
 1 `Baseline`: parameters of the baseline (linear model)
   * `intercept` = y-intercept of the linear model
   * `slope` = slope of the linear model
