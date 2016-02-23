@@ -12,7 +12,9 @@ Currently two versions of the algorithm are hosted here: the original V06-11 and
 *  bootstrap functionality has been added. This is implemented via a second function (...) which is called within the FPK procedure and carries out the actual resampling. This makes for a compuationally intensive analysis, but gives you confidence intervals for the parameter estimates. 
 *  debugg option added 
 
-###### FPK V06-11
+Below you will find a short description of the usage, arguments, and output of each version. The input requirements in terms of real time PCR data are identical, so both can be used on the same data format.
+
+#### Version FPK-V06-11
 
 Usage: 
 ```
@@ -28,7 +30,40 @@ Arguments:
 - `silent` is a Logical, if `TRUE` no messages are returned 
 - `vecto`is a Logical, if `TRUE` the data are returned as a vector rather than a list. 
 
-###### FPK V13-13
+Output: 
+Standard output returns three values:
+* `Cq`: quantification cycle, calculated at the first positive second derivative maximum of a five parameter logistic model.
+* `Emax`: initial (maximal) efficiency of the reaction
+* `a*i0`: initial reaction fluorescence (number of initial target copies times the fluorescence of a single amplicon), expressed in Fluorescence Units (FU)
+
+parameter output (`param = TRUE`) returns three sets of parameters:
+- `Baseline`: parameters of the baseline (linear model)
+  * `intercept` = y-intercept of the linear model
+  * `slope` = slope of the linear model 
+- `5PLM`: parameters of the five paramter logistic model (with sloped baseline):
+```
+Fn = fmax + s*x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b*(x-xmid)))^g
+```
+  * `y0` = a numeric parameter representing the intercept of the baseline
+  * `s` = a numeric parameter representing the slope of the baseline
+  * `fmax` = a numeric parameter representing the horizontal asymptote on the right side (plateau)
+  * `xmid` = a numeric parameter representing the input value at the center of the curve
+  * `b` = a numeric scale parameter on the input axis, the 'growth rate'
+  * `g` = the reciprocal of the shape parameter: affects near which asymptote maximum 'growth' occurs
+
+- `Bilinear`: parameters of the bilinear model:
+```
+Ln²(En) = chi + eta *log(exp(( a1a * (input-ipt)^2+ a1b *(input-ipt))/eta) + exp( a2 *(n-ipt)/eta))
+```
+  * `a1a` = "slope" describes together with a1b the curve of the first phase of efficiency decline
+  * `a1b` = "slope" describes together with a1a the curve of the first phase of efficiency decline
+  * `a2` = "slope" represents the steepness of the second phase of efficiency decline
+  * `ipt` = corresponds to the horizontal position of the phase change
+  * `eta` = affects the abruptness of transition between the two phases
+  * `chi` = affects the y-intercept of the curve
+   
+  
+#### Version FPK-V13-13
 
 Usage:
 ```
@@ -46,7 +81,7 @@ Arguments:
 - `kalman` is a logical, if `TRUE` the kalman filter is used to include groundphase data into the analysis
 - `debugg` is a logical, if `TRUE`  intermediate values, warning messages, and diagnosic plots are returned
 - `resec.tolerance` is a numerical vector of length 1. It determines a cut-off for the 5PLM residual error per cycle. This  serves as a tool in low-level presence analysis (reactions with high values are not likely to contain bona fide amplification, `NA` output is returned for reactions that exceed the threshold)
-- `bootstrap` is a logical, if `TRUE` a bootstrap analysis will be performed and BCa confidence intervals will be returned for the parameter estimates. **Warning** this is rather computationally intensive, you may want to go get a coffee or something. Better first run a few reactions at a time to see how well systems handles the punishment. Also, you may want to switch off the baseline optimization for the bootstrap (just use `base.line = "slanted"`) since its usage increases the computational load rather exponentially. 
+- `bootstrap` is a logical, if `TRUE` a bootstrap analysis will be performed and BCa confidence intervals will be returned for the parameter estimates. **Warning:** this is rather computationally intensive, you may want to go get a coffee or something. Better first run a few reactions at a time to see how well systems handles the punishment. Also, you may want to switch off the baseline optimization for the bootstrap (just use `base.line = "slanted"`) since its usage increases the computational load rather exponentially. 
 - `n` is a numerical of length 1, the number of bootstraps that will be performed.
 - `p` is a numerical of length 1, the p-value of the confidence bounds calculated.
 
@@ -89,14 +124,8 @@ react<-c(193.6422, 209.2176,  221.9136,  233.8279,  243.1534,  245.9008,  251.70
 
 analyse(react)
 	
-#or
-	
 analyse(react,plots=TRUE)
 
-	
-#or
-	
-analyse(react,param=TRUE)
 ```
 
 ### Disclaimer 
