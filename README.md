@@ -1,15 +1,15 @@
 # Full Process Kinetics PCR Analysis
-This branch contains the FPK-PCR algorithm (V06-11) originally published in ..... (link), its updates and expansions. We refer the user to the original publication for the interpretation of results and background on the procedure.  
+This branch contains the FPK-PCR algorithm (V06-11) originally published in Nucleic Acids Research ([link](http://nar.oxfordjournals.org/content/40/2/e10.long)), its updates and expansions. We refer the user to the original publication for the interpretation of results and background on the procedure.  
 
-## FPK-PCR Algortihtm   
-Currently two versions of the algorithm are hosted here: the original V06-11 and V13-13 (a drastic update with model changes and expanded functionality). The most important changes since V06-11 are:
+## FPK-PCR Algorithm   
+Currently two versions of the algorithm are hosted here: the original V06-11 and the newer V13-13 (a drastic update with model changes and expanded functionality). The functions are contained in the files `FPK-V06-11 (Analysis).R` and `FPK-V13-13 (Analysis).R` respectively. The most important changes since V06-11 are:
 *  Addition of the baseline optimisation system, computationally intensive, but optimizes the baseline intercept so that the expected value of the residuals is as close as possible to zero (irrespective of their size). This prevents biased effiency estimates because of baseline over or under subtraction.
 *  The FPK PCR model for the first phase of efficiency decline now has less degrees of freedom, this reduces the variability in the estimates.
 * The Kalman filter is implemented to try to scavange as much information as possible from the groundphase.
 * Kalman covariance is estimated via bootstrap 
 * Resec implementation to weed out non-amplification fits. Surprisingly, the model will succeed in fitting itselve to random data (no amplification, only noise) surprisingly often. When analysing datasets that have a lot of negatives this can highly annoting, hence this threshold.
 *  The start of the model fitting no longer lies at cycle(5%)+1 but now lies at cycle(7.5%), this has further reduced variability in effiency estimates
-*  bootstrap functionality has been added. This is implemented via a second function (...) which is called within the FPK procedure and carries out the actual resampling. This makes for a compuationally intensive analysis, but gives you confidence intervals for the parameter estimates. 
+*  bootstrap functionality has been added. This is implemented via a second function (`phaseboot()`, contained in `FPK-V13-13 (Bootstrap.R`) which is called within the FPK procedure and carries out the actual resampling. This makes for a compuationally intensive analysis, but gives you confidence intervals for the parameter estimates. Note that both functions (`analyse()`and `phaseboot()`) have to be loaded into the same environment for the bootstrap functionality to work.
 *  debugg option added 
 
 Below you will find a short description of the usage, arguments, and output of each version. The input requirements in terms of real time PCR data are identical, so both can be used on the same data format.
