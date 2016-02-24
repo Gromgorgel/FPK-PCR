@@ -143,14 +143,30 @@ The .R files contain three additional functions: `analyze()`, `semper()`, and `s
 * `semper2()` = identical to `semper()`, but instead of all `NA`output, all `NaN`output is produced. This is handy when you want to identify the reactions that crash the algorithm since reactions that are (correctly) identified as 'no amplification' will have all `NA`output as well. 
 
 ### Example
-```
-react<-c(193.6422, 209.2176,  221.9136,  233.8279,  243.1534,  245.9008,  251.7054,  253.5101,  260.7267,  258.2353,  261.5051,  265.9691,  268.3236,  273.0342,  274.9183, 281.7958,  291.9236,  312.8073,  353.2469,  425.0797,  558.4097,  801.8603, 1141.0918, 1617.8774, 2179.0478, 2796.2294, 3426.8560, 4029.0126, 4564.6015, 5065.4347, 5478.7222, 5865.2510, 6197.9947, 6502.7750, 6783.9353, 6997.8949, 7211.0589, 7422.2636, 7626.5014, 7732.2221, 7820.8930, 7925.0876, 7991.5905, 8029.5963, 8045.4035, 8045.6049, 8064.2315, 8103.9244, 8120.5715, 8104.7643, 8117.3816, 8090.2008, 8132.5172, 8078.8213, 8081.2783, 8058.4114, 8021.9082, 8020.0389, 7986.3723, 7999.9835)
-
-analyse(react)
-	
-analyse(react,plots=TRUE)
+please have all .R and .RData files from this branch in your working directory before running the example. Installation of the package `SuppDists` may be required before the algorithm functions.
 
 ```
+load("qpcr-Example.RData")
+source("FPK-V13-13 (Analysis).r")
+source("FPK-V13-13 (Bootstrap).r")
+
+# Analyse a single reaction
+analyse(q.pcr[, 1], silent = TRUE)
+
+# Analyse a single reaction with plots
+analyse(q.pcr[, 2], plots=TRUE)
+
+# Example of analysis with bootstrap Confidence Bounds
+analyse(q.pcr[, 2], bootstrap = TRUE, plots=TRUE)
+
+# slightly faster bootstrap analysis:
+analyse(q.pcr[, 2], base.line = "slanted", bootstrap = TRUE, plots=TRUE)
+
+# Example of batch analysis
+results <- apply(q.pcr, 2, analyse,  base.line = "slanted", output = "all", silent = TRUE)
+head(results[, 1:5])
+```
+
 ### Disclaimer 
 This function has only been tested on a limited amount of data, there may be a few bugs left.
 
