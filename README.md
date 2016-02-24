@@ -7,7 +7,7 @@ Currently two versions of the algorithm are hosted here: the original V06-11 and
 *  The FPK PCR model for the first phase of efficiency decline now has less degrees of freedom, this reduces the variability in the estimates.
 * The Kalman filter is implemented to try to scavange as much information as possible from the groundphase.
 * Kalman covariance is estimated via bootstrap 
-* Resec implementation to weed out non-amplification fits. Surprisingly, the model will succeed in fitting itselve to random data (no amplification, only noise) surprisingly often. When analysing datasets that have a lot of negatives this can highly annoting, hence this threshold.
+* Resec implementation to weed out non-amplification fits. Surprisingly, the model will succeed in fitting itselve to random data (no amplification, only noise) surprisingly often. When analysing datasets that have a lot of negatives this can be very annoying, hence this threshold.
 *  The start of the model fitting no longer lies at cycle(5%)+1 but now lies at cycle(7.5%), this has further reduced variability in effiency estimates
 *  bootstrap functionality has been added. This is implemented via a second function (`phaseboot()`, contained in `FPK-V13-13 (Bootstrap.R`) which is called within the FPK procedure and carries out the actual resampling. This makes for a compuationally intensive analysis, but gives you confidence intervals for the parameter estimates. Note that both functions (`analyse()`and `phaseboot()`) have to be loaded into the same environment for the bootstrap functionality to work.
 *  debugg option added 
@@ -109,11 +109,17 @@ Output
  * `g` = the reciprocal of the shape parameter: affects near which asymptote maximum 'growth' occurs
 ```
 5PLM model
-Fn = fmax + s*x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b*(x-xmid)))^g
+y = fmax + s * x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b * (x - xmid)))^g
 ```
 
-3 `Quadratic`: parameters of ...
- * test
+3 `Quadratic`: parameters of the quadratic function that is fit to the first phase of efficiency decline
+ * `int`  = a numeric parameter representing the intercept of the model
+ * `slo1`  = a numeric parameter representing the slope of the model
+ * `slo2`  = a numeric parameter representing the curvature of the model
+```
+Quadratic model
+y = int + slo1 * x + slo2 * x^2 
+```
 
 4 `Bilinear`: parameters of the bilinear model:
  * `a1a` = "slope" describes together with a1b the curve of the first phase of efficiency decline
@@ -124,10 +130,17 @@ Fn = fmax + s*x + (y0 - fmax) / (1 + (2^(1/g)-1) * exp(b*(x-xmid)))^g
  * `chi` = affects the y-intercept of the curve
 ```
 Bilinear model:
-Ln²(En) = chi + eta *log(exp(( a1a * (input-ipt)^2+ a1b *(input-ipt))/eta) + exp( a2 *(n-ipt)/eta))
+y = chi + eta *log(exp(( a1a * (x - ipt)^2 + a1b  * (x - ipt)) / eta) + exp( a2 * (x - ipt)/eta))
 ```  
 
 `ouptut = "all"` returns all of the above parameters in a single vector (length = 20)
+
+### Additional functions provided
+The .R files contain three additional functions: `analyze()`, `semper()`, and `semper2()`. These are essentially wrappers for the anctual `analyse()` function that add the following functionality:
+
+* `analyze()` = no added functionality, simply allows to use the function with an alternative spelling of the function name.
+* `semper()` = wraps the analysis in a `try()` function that will essentially absorb all algortithm crashes and aborts so that output is still produced (all parameters are set to `NA` in the output). This is handy when analysing larger datasets and you don't want a single reaction preventing output being produced for all the other reactions. 
+* `semper2()` = identical to `semper()`, but instead of all `NA`output, all `NaN`output is produced. This is handy when you want to identify the reactions that crash the algorithm since reactions that are (correctly) identified as 'no amplification' will have all `NA`output as well. 
 
 ### Example
 ```
@@ -138,7 +151,6 @@ analyse(react)
 analyse(react,plots=TRUE)
 
 ```
-
 ### Disclaimer 
 This function has only been tested on a limited amount of data, there may be a few bugs left.
 
