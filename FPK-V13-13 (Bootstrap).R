@@ -1,5 +1,9 @@
 #######Bootstrap procedure based on FFF-V08
 
+## This is an extension of the original algirthim published in:
+## http://nar.oxfordjournals.org/content/40/2/e10.long
+## Further Updates will appear at: github.com/Gromgorgel
+
 # Fn            Fluo values of the data to be boostrapped
 # Ln            log(log(En)) values of the data to be bootstrapped
 # RSS           Residual sum of squares of the original sample linear model, needed to set the frequency cutoff
