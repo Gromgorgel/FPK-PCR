@@ -2,7 +2,8 @@
 ##             there may be a few bugs left. Please contact the author with 
 ##             any remarks and/or suggestions.
 ##
-## email: antoon.lievens@ec.europa.eu
+## Original Publication: http://nar.oxfordjournals.org/content/40/2/e10.long
+## Updates will appear at: github.com/Gromgorgel
 ##
 ## Most problems are caused by a lack of data resulting in a suboptimal fit
 ## try running more cycles and increasing primer concentration.
