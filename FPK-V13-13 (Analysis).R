@@ -3,7 +3,9 @@
 
 ##             any remarks and/or suggestions.
 ##
-## email: antoon.lievens@ec.europa.eu
+## This is an update of the original algirthim published in:
+## http://nar.oxfordjournals.org/content/40/2/e10.long
+## Further Updates will appear at: github.com/Gromgorgel
 ##
 ## Most problems are caused by a lack of data resulting in a suboptimal fit
 ## try running more cycles and increasing primer concentration.
