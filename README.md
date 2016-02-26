@@ -138,7 +138,7 @@ y = chi + eta *log(exp(( a1a * (x - ipt)^2 + a1b  * (x - ipt)) / eta) + exp( a2 
 ### Additional functions provided
 The .R files contain three additional functions: `analyze()`, `semper()`, and `semper2()`. These are essentially wrappers for the anctual `analyse()` function that add the following functionality:
 
-* `analyze()` = no added functionality, simply allows to use the function with an alternative spelling of the function name.
+* `analyze()` = no added functionality, simply allows to use the function with an alternative spelling its name.
 * `semper()` = wraps the analysis in a `try()` function that will essentially absorb all algortithm crashes and aborts so that output is still produced (all parameters are set to `NA` in the output). This is handy when analysing larger datasets and you don't want a single reaction preventing output being produced for all the other reactions. 
 * `semper2()` = identical to `semper()`, but instead of all `NA`output, all `NaN`output is produced. This is handy when you want to identify the reactions that crash the algorithm since reactions that are (correctly) identified as 'no amplification' will have all `NA`output as well. 
 
